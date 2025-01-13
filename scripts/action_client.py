@@ -5,13 +5,19 @@ import actionlib
 from assignment_2_2024.msg import PlanningAction, PlanningGoal
 from nav_msgs.msg import Odometry
 from assignment_2_2024.msg import PositionVelocity
-from assignment_2_2024.srv import GetLastTarget
+from assignment_2_2024.srv import GetLastTarget, GetLastTargetResponse
 
 class ActionClientNode:
     def __init__(self):
         rospy.init_node('action_client_node')
         self.client = actionlib.SimpleActionClient('/reaching_goal', PlanningAction)
         self.pub_pos_vel = rospy.Publisher('/robot_position_velocity', PositionVelocity, queue_size=10)
+        # Defining the goal as an attribute of the class 
+        self.goal = PlanningGoal()
+        
+        # Setting up get_last_target service
+        self.service = rospy.Service('/get_last_target', GetLastTarget, self.handle_service)
+        
         self.sub_odom = rospy.Subscriber('/odom', Odometry, self.odom_callback)
 
         # Service client to update the last target
@@ -23,14 +29,14 @@ class ActionClientNode:
         rospy.loginfo("Action server ready!")
 
     def send_goal(self, x, y):
-        goal = PlanningGoal()
-        goal.target_pose.header.frame_id = "map"
-        goal.target_pose.header.stamp = rospy.Time.now()
-        goal.target_pose.pose.position.x = x
-        goal.target_pose.pose.position.y = y
-        goal.target_pose.pose.orientation.w = 1.0
+	
+        self.goal.target_pose.header.frame_id = "map"
+        self.goal.target_pose.header.stamp = rospy.Time.now()
+        self.goal.target_pose.pose.position.x = x
+        self.goal.target_pose.pose.position.y = y
+        self.goal.target_pose.pose.orientation.w = 1.0
         rospy.loginfo(f"Sending goal: ({x}, {y})")
-        self.client.send_goal(goal, feedback_cb=self.feedback_callback)
+        self.client.send_goal(self.goal, feedback_cb=self.feedback_callback)
 
     def cancel_goal(self):
         rospy.loginfo("Canceling goal...")
@@ -49,6 +55,17 @@ class ActionClientNode:
             pos_vel_msg.vel_z = msg.twist.twist.angular.z
             self.pub_pos_vel.publish(pos_vel_msg)
 
+
+    def handle_service(self,req):
+        if self.goal:
+            #rospy.loginfo(f"Returning last target: {self.goal.last_target}")
+            
+            return GetLastTargetResponse(x=self.goal.target_pose.pose.position.x ,y=self.goal.target_pose.pose.position.y )
+        else:
+            rospy.loginfo("No target set, returning default (0.0, 0.0).")
+            return GetLastTargetResponse(x=0.0, y=0.0)               
+
+
     def run(self):
         rospy.loginfo("Action Client Node running...")
         while not rospy.is_shutdown():
@@ -66,3 +83,4 @@ if __name__ == "__main__":
     node = ActionClientNode()
     node.run()
     rospy.spin()
+
