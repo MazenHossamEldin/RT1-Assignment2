@@ -14,27 +14,27 @@ To work with this part of the assignment, you will need the following:
 1. **Clone the `robot_urdf` repository with the `ros2` branch:**
 
     ```bash
-    git clone -b ros2 https://github.com/CarmineD8/robot_urdf.git
+        git clone -b ros2 https://github.com/CarmineD8/robot_urdf.git
     ```
 
 2. **Build the `robot_urdf` package:**
 
     ```bash
-    cd robot_urdf
-    colcon build
-    source install/setup.bash
+        cd robot_urdf
+        colcon build
+        source install/setup.bash
     ```
 3.** Make sure to install the following dependencies:**
 	```bash
- 	apt-get install ros-foxy-xacro ros-foxy-joint-state-publisher ros-foxy-gazebo*
-    	```	
+ 	    apt-get install ros-foxy-xacro ros-foxy-joint-state-publisher ros-foxy-gazebo*
+    ```	
 
 4. **Clone this repository and switch to the `part2` branch:**
 
     ```bash
-    git clone https://github.com/MazenHossamEldin/RT1-Assignment2.git
-    cd RT1-Assignment2
-    git checkout part2
+        git clone https://github.com/MazenHossamEldin/RT1-Assignment2.git
+        cd RT1-Assignment2
+        git checkout part2
     ```
 
 5. **Install required dependencies:**
@@ -42,14 +42,14 @@ To work with this part of the assignment, you will need the following:
     Ensure you have all the required dependencies installed. You may use `rosdep` to install them:
 
     ```bash
-    rosdep install --from-paths src --ignore-src -r -y
+        rosdep install --from-paths src --ignore-src -r -y
     ```
 
 6. **Build the package:**
 
     ```bash
-    colcon build
-    source install/setup.bash
+            colcon build --packages-select robot_controller
+            source install/setup.bash
     ```
 
 ## Running the Simulation
