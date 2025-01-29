@@ -2,21 +2,21 @@
 
 import rospy
 import actionlib
-from assignment_2_2024.msg import PlanningAction, PlanningGoal
+from assignment_2_2024.action import PlanningAction, PlanningGoal
 from nav_msgs.msg import Odometry
 from assignment_2_2024.msg import PositionVelocity
 from assignment_2_2024.srv import GetLastTarget, GetLastTargetResponse
 
 class ActionClientNode:
     def __init__(self):
-        rospy.init_node('action_client_node')
-        self.client = actionlib.SimpleActionClient('/reaching_goal', PlanningAction)
-        self.pub_pos_vel = rospy.Publisher('/robot_position_velocity', PositionVelocity, queue_size=10)
+        rospy.init_node('action_client_node') # initializing the node
+        self.client = actionlib.SimpleActionClient('/reaching_goal', PlanningAction) # client for the action server
+        self.pub_pos_vel = rospy.Publisher('/robot_position_velocity', PositionVelocity, queue_size=10) # publisher for the position and velocity
         # Defining the goal as an attribute of the class 
-        self.goal = PlanningGoal()
+        self.goal = PlanningGoal() 
         
         # Setting up get_last_target service
-        self.service = rospy.Service('/get_last_target', GetLastTarget, self.handle_service)
+        self.service = rospy.Service('/get_last_target', GetLastTarget, self.handle_service) 
         
         self.sub_odom = rospy.Subscriber('/odom', Odometry, self.odom_callback)
 
