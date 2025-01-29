@@ -1,11 +1,14 @@
-import rclpy
-from rclpy.node import Node
-from geometry_msgs.msg import Twist
-from nav_msgs.msg import Odometry
+#! /usr/bin/env python3
+
+import rclpy  
+from rclpy.node import Node 
+from geometry_msgs.msg import Twist 
+from nav_msgs.msg import Odometry 
+import time
 
 class MoveRobotNode(Node):
     def __init__(self):
-        super().__init__('move_robot')
+        super().__init__('move_robot') 
 
         # Publisher to send velocity commands
         self.publisher = self.create_publisher(Twist, '/cmd_vel', 10)
@@ -16,7 +19,7 @@ class MoveRobotNode(Node):
             '/odom',
             self.odom_callback,
             10
-        )
+        ) 
 
         # Timer to periodically ask for user input
         self.timer = self.create_timer(1.0, self.get_user_input)
@@ -46,6 +49,13 @@ class MoveRobotNode(Node):
         # Publish the velocity command
         self.publisher.publish(twist)
         self.get_logger().info(f"Publishing command: linear.x={linear_speed}, angular.z={angular_speed}")
+        
+        time.sleep(1.0)
+
+        twist.linear.x = 0.0  
+        twist.angular.z = 0.0 
+        self.publisher.publish(twist)
+        self.get_logger().info("Command executed. Turtle has stopped. Enter a new command.")
 
     def odom_callback(self, msg):
         """
@@ -53,10 +63,10 @@ class MoveRobotNode(Node):
         """
         self.current_odom = msg
         # Log position and orientation from odometry
-        position = msg.pose.pose.position
-        orientation = msg.pose.pose.orientation
-        #self.get_logger().info(f"Odometry: Position - x: {position.x}, y: {position.y}, z: {position.z}")
-        #self.get_logger().info(f"Orientation: x: {orientation.x}, y: {orientation.y}, z: {orientation.z}, w: {orientation.w}")
+        position = msg.pose.pose.position 
+        orientation = msg.pose.pose.orientation 
+        self.get_logger().info(f"Odometry: Position - x: {position.x}, y: {position.y}, z: {position.z}") 
+        self.get_logger().info(f"Orientation: x: {orientation.x}, y: {orientation.y}, z: {orientation.z}, w: {orientation.w}") 
 
 def main(args=None):
     rclpy.init(args=args)
