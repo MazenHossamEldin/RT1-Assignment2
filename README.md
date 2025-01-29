@@ -66,10 +66,8 @@ After completing the setup, you can run the simulation as follows:
 
 2.**Launch the robot description:**
 
-    In one terminal, launch the robot description:
-
     ```bash
-    ros2 launch gazebo.launch.py
+    ros2 launch robot_urdf gazebo.launch.py
     ```
 
 3. **Run the assignment code:**
