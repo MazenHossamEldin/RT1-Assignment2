@@ -61,7 +61,7 @@ After completing the setup, you can run the simulation as follows:
 
     ```bash
     	source /opt/ros/foxy/setup.bash
-	source ~/<your path>/install/setup.bash
+	    source ~/ros2_ws/install/setup.bash
     ```
 
 2.**Launch the robot description:**
