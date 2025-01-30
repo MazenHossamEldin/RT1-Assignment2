@@ -6,12 +6,16 @@ from assignment_2_2024.action import PlanningAction, PlanningGoal
 from nav_msgs.msg import Odometry
 from assignment_2_2024.msg import PositionVelocity
 from assignment_2_2024.srv import GetLastTarget, GetLastTargetResponse
+from geometry_msgs.msg import Twist
+from assignment_2_2024.srv import GoalStatistics, GoalStatisticsResponse
 
 class ActionClientNode:
     def __init__(self):
         rospy.init_node('action_client_node') # initializing the node
         self.client = actionlib.SimpleActionClient('/reaching_goal', PlanningAction) # client for the action server
         self.pub_pos_vel = rospy.Publisher('/robot_position_velocity', PositionVelocity, queue_size=10) # publisher for the position and velocity
+        
+        self.pub_act_vel=rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         # Defining the goal as an attribute of the class 
         self.goal = PlanningGoal() 
         
@@ -28,6 +32,13 @@ class ActionClientNode:
         self.client.wait_for_server()
         rospy.loginfo("Action server ready!")
 
+        # initializing the goals reached and cancelled
+        self.goals_reached = 0
+        self.goals_cancelled = 0
+
+        # Add service for goal statistics
+        self.stats_service = rospy.Service('/goal_statistics', GoalStatistics, self.handle_stats_service)
+
     def send_goal(self, x, y):
 	
         self.goal.target_pose.header.frame_id = "map"
@@ -36,11 +47,23 @@ class ActionClientNode:
         self.goal.target_pose.pose.position.y = y
         self.goal.target_pose.pose.orientation.w = 1.0
         rospy.loginfo(f"Sending goal: ({x}, {y})")
-        self.client.send_goal(self.goal, feedback_cb=self.feedback_callback)
+        self.client.send_goal(self.goal, feedback_cb=self.feedback_callback, done_cb=self.goal_done_callback)
 
     def cancel_goal(self):
         rospy.loginfo("Canceling goal...")
         self.client.cancel_goal()
+        self.goals_cancelled += 1
+
+    def goal_done_callback(self, status, result):
+        if status == actionlib.GoalStatus.SUCCEEDED:
+            rospy.loginfo("Goal reached!")
+            self.goals_reached += 1
+
+    def handle_stats_service(self, req):
+        return GoalStatisticsResponse(
+            goals_reached=self.goals_reached,
+            goals_cancelled=self.goals_cancelled
+        )
 
     def feedback_callback(self, feedback):
         rospy.loginfo(f"Feedback received: {feedback}")
@@ -54,6 +77,12 @@ class ActionClientNode:
             pos_vel_msg.vel_x = msg.twist.twist.linear.x
             pos_vel_msg.vel_z = msg.twist.twist.angular.z
             self.pub_pos_vel.publish(pos_vel_msg)
+
+            # publishing the robot actual velocity
+            vel_msg = Twist()
+            vel_msg.linear.x = msg.twist.twist.linear.x * 3.6
+            vel_msg.linear.y = msg.twist.twist.linear.y * 3.6
+            self.pub_act_vel.publish(vel_msg)
 
 
     def handle_service(self,req):

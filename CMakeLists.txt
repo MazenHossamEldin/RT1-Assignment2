@@ -64,6 +64,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_service_files(
     FILES
     GetLastTarget.srv
+    GoalStatistics.srv
 #   Service1.srv
 #   Service2.srv
  )
