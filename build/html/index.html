@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Indices &#8212; Assignment1 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=6625fa76" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=0868e8a2" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=359c27e9"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="toctree-wrapper compound">
+</div>
+<section id="indices">
+<h1>Indices<a class="headerlink" href="#indices" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+<section id="action-client-node-documentation">
+<h2>Action Client Node Documentation<a class="headerlink" href="#action-client-node-documentation" title="Permalink to this heading">¶</a></h2>
+<p>This is the documentation for the action client node in ROS</p>
+</section>
+</section>
+<section id="module-action_client">
+<span id="action-client-node"></span><h1>Action Client Node<a class="headerlink" href="#module-action_client" title="Permalink to this heading">¶</a></h1>
+<p><em>Module author: Mazen Madbouly &lt;<a class="reference external" href="mailto:mazen&#46;madbouly01&#37;&#52;&#48;gmail&#46;com">mazen<span>&#46;</span>madbouly01<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</em></p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">action_client.</span></span><span class="sig-name descname"><span class="pre">ActionClientNode</span></span><a class="reference internal" href="_modules/action_client.html#ActionClientNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><dl class="py class">
+<dt class="sig sig-object py" id="action_client.ActionClientNode.ActionClientNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActionClientNode</span></span><a class="headerlink" href="#action_client.ActionClientNode.ActionClientNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Brief<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Encapsulates a ROS node that acts as an action client.</p>
+</dd>
+</dl>
+<p>This class initializes a ROS node that communicates with a planning action server to send goals,
+receives feedback, and publishes the robot’s position and velocity. Additionally, it sets up a service
+to return the last goal target.</p>
+<p><strong>ROS Topics:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Publishes to: <code class="docutils literal notranslate"><span class="pre">/robot_position_velocity</span></code> (PositionVelocity)</p></li>
+<li><p>Subscribes to: <code class="docutils literal notranslate"><span class="pre">/odom</span></code> (Odometry)</p></li>
+</ul>
+</div></blockquote>
+<p><strong>ROS Services:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Advertises: <code class="docutils literal notranslate"><span class="pre">/get_last_target</span></code> (GetLastTarget)</p></li>
+</ul>
+</div></blockquote>
+<p><strong>ROS Action Server:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Uses action server: <code class="docutils literal notranslate"><span class="pre">/reaching_goal</span></code> (PlanningAction)</p></li>
+</ul>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">cancel_goal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/action_client.html#ActionClientNode.cancel_goal"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Cancels the currently active goal.</p>
+<p>Logs the cancellation and sends a cancel request to the action server.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">feedback_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/action_client.html#ActionClientNode.feedback_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Callback function to handle feedback from the action server.</p>
+<p>Logs the feedback received.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feedback</strong> – Feedback message from the action server.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">handle_service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/action_client.html#ActionClientNode.handle_service"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Service handler to return the last target goal.</p>
+<p>If a goal has been set, returns its x and y coordinates. Otherwise, returns default values (0.0, 0.0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>req</strong> – Service request (unused).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GetLastTargetResponse with x and y coordinates of the last target.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">odom_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/action_client.html#ActionClientNode.odom_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Callback function for odometry data.</p>
+<p>Receives odometry messages, extracts position and velocity information, and publishes it
+as a PositionVelocity message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> – Odometry message received from the <code class="docutils literal notranslate"><span class="pre">/odom</span></code> topic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/action_client.html#ActionClientNode.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Runs the ActionClientNode.</p>
+<p>Enters a continuous loop that waits for user input from the console to control the robot’s behavior.
+The loop continues until ROS is shutdown or the user chooses to quit.</p>
+<dl class="simple">
+<dt>Command options:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>‘s’: Prompts the user to enter x and y coordinates for a new target position,</dt><dd><p>then calls send_goal() to send this target to the action server.</p>
+</dd>
+</dl>
+</li>
+<li><p>‘c’: Calls cancel_goal() to abort the current navigation goal if one is active.</p></li>
+<li><p>‘q’: Breaks out of the loop, effectively terminating the node’s main function.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The function uses ROS’s is_shutdown() check to ensure proper termination when ROS
+signals are received.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">send_goal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/action_client.html#ActionClientNode.send_goal"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Sends a goal to the action server.</p>
+<p>Updates the goal with the specified x and y coordinates, stamps it with the current time,
+and sends it to the action server. The goal is defined in the “map” coordinate frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Target x-coordinate (float)</p></li>
+<li><p><strong>y</strong> – Target y-coordinate (float)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Assignment1</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2025, Mazen_Madbouly.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
